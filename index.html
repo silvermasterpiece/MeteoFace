@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeteoFace - Pro Analiz</title>
+    
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="brand-box">METEOFACE | ANALİZ</div>
+
+    <div id="loader">Veriler İndiriliyor...</div>
+
+    <div class="style-dock">
+        <button onclick="changeStyle('dark')" class="style-btn active" title="Karanlık">
+            <i class="fa-solid fa-moon"></i>
+        </button>
+        <button onclick="changeStyle('satellite')" class="style-btn" title="Uydu">
+            <i class="fa-solid fa-earth-europe"></i>
+        </button>
+        <button onclick="changeStyle('light')" class="style-btn" title="Aydınlık">
+            <i class="fa-solid fa-sun"></i>
+        </button>
+    </div>
+
+    <div id="legend-box">
+        <div class="legend-title">SICAKLIK (°C)</div>
+        <div class="legend-bar" id="legend-gradient"></div>
+        <div class="legend-labels" id="legend-labels">
+            <span>-10</span><span>0</span><span>10</span><span>20</span><span>30</span><span>40+</span>
+        </div>
+    </div>
+
+    <div class="time-control-box">
+        <div id="time-display">YÜKLENİYOR...</div>
+        
+        <div class="slider-row">
+            <button id="play-btn" onclick="togglePlay()">
+                <i class="fa-solid fa-play"></i>
+            </button>
+            <input type="range" id="time-slider" min="0" max="47" value="0" step="1" disabled>
+        </div>
+
+        <div class="slider-labels">
+            <span>Şimdi</span>
+            <span>+24s</span>
+            <span>+48s</span>
+        </div>
+    </div>
+
+    <div class="control-dock">
+        <button class="dock-btn active" onclick="setMode('temp')" id="btn-temp">
+            <i class="fa-solid fa-temperature-half"></i> Isı
+        </button>
+        <button class="dock-btn" onclick="setMode('wind')" id="btn-wind">
+            <i class="fa-solid fa-wind"></i> Rüzgar
+        </button>
+        <button class="dock-btn" onclick="setMode('pressure')" id="btn-pressure">
+            <i class="fa-solid fa-gauge-high"></i> Basınç
+        </button>
+        <button class="dock-btn" onclick="setMode('code')" id="btn-code">
+            <i class="fa-solid fa-cloud"></i> Hadise
+        </button>
+    </div>
+
+    <div id="map"></div>
+
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+</html>
