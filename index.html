@@ -55,8 +55,11 @@
     </div>
 
     <div class="control-dock">
+                <button class="dock-btn" onclick="setMode('code')" id="btn-code">
+            <i class="fa-solid fa-cloud"></i> Hadise
+        </button>
         <button class="dock-btn active" onclick="setMode('temp')" id="btn-temp">
-            <i class="fa-solid fa-temperature-half"></i> Isı
+            <i class="fa-solid fa-temperature-half"></i> Sıcaklık
         </button>
         <button class="dock-btn" onclick="setMode('wind')" id="btn-wind">
             <i class="fa-solid fa-wind"></i> Rüzgar
@@ -64,9 +67,7 @@
         <button class="dock-btn" onclick="setMode('pressure')" id="btn-pressure">
             <i class="fa-solid fa-gauge-high"></i> Basınç
         </button>
-        <button class="dock-btn" onclick="setMode('code')" id="btn-code">
-            <i class="fa-solid fa-cloud"></i> Hadise
-        </button>
+
     </div>
 
     <div id="map"></div>
@@ -78,3 +79,4 @@
 </body>
 
 </html>
+
