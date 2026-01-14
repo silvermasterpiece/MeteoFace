@@ -1,5 +1,5 @@
 // --- AYARLAR ---
-const MAPBOX_TOKEN = 'pk.eyJ1IjoibXltYXN0ZXJwaWVjZSIsImEiOiJjbWtkeTVldWkwMTd5M2VxdG85ZWNuMTRjIn0.PT21F_ySshsLGTIiVJB-gg'; // Tokenini buraya yapıştır!
+const MAPBOX_TOKEN = 'pk.eyJ1IjoibXltYXN0ZXJwaWVjZSIsImEiOiJjbWtkeWFheDEwMTVvM2NxcXJkdzExZjd3In0.nmra2NE82BvwU654Svm9xQ'; // Tokenini buraya yapıştır!
 
 mapboxgl.accessToken = MAPBOX_TOKEN;
 
@@ -380,3 +380,4 @@ setInterval(async () => {
     updateMapState();
 
 }, 1000 * 60 * 30);
+
