@@ -394,7 +394,7 @@ input[type=range]::-webkit-slider-thumb:hover {
     border-top-color: rgba(16, 18, 27, 0.95);
 }
 
-/* --- YÜKLENİYOR EKRANI --- */
+/*   --- YÜKLENİYOR EKRANI --- */
 #loader {
     position: absolute;
     top: 50%;
