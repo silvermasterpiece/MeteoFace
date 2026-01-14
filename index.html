@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MeteoFace - Pro Analiz</title>
-    
+
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <div class="brand-box">METEOFACE | ANALİZ</div>
@@ -30,7 +32,7 @@
     </div>
 
     <div class="opacity-box">
-        <div class="opacity-label"><i class="fa-solid fa-eye"></i> GÖRÜNÜRLÜK</div>
+        <div class="opacity-label"><i class="fa-solid fa-eye"></i> Şeffaflık</div>
         <input type="range" id="opacity-slider" min="0" max="1" step="0.1" value="1">
     </div>
 
@@ -44,7 +46,7 @@
 
     <div class="time-control-box">
         <div id="time-display">YÜKLENİYOR...</div>
-        
+
         <div class="slider-row">
             <button id="play-btn" onclick="togglePlay()">
                 <i class="fa-solid fa-play"></i>
@@ -60,8 +62,11 @@
     </div>
 
     <div class="control-dock">
+        <button class="dock-btn" onclick="setMode('code')" id="btn-code">
+            <i class="fa-solid fa-cloud"></i> Hadise
+        </button>
         <button class="dock-btn active" onclick="setMode('temp')" id="btn-temp">
-            <i class="fa-solid fa-temperature-half"></i> Isı
+            <i class="fa-solid fa-temperature-half"></i> Sıcaklık
         </button>
         <button class="dock-btn" onclick="setMode('wind')" id="btn-wind">
             <i class="fa-solid fa-wind"></i> Rüzgar
@@ -69,9 +74,7 @@
         <button class="dock-btn" onclick="setMode('pressure')" id="btn-pressure">
             <i class="fa-solid fa-gauge-high"></i> Basınç
         </button>
-        <button class="dock-btn" onclick="setMode('code')" id="btn-code">
-            <i class="fa-solid fa-cloud"></i> Hadise
-        </button>
+
     </div>
 
     <div id="map"></div>
@@ -81,4 +84,5 @@
     <script src="app.js"></script>
 
 </body>
+
 </html>
