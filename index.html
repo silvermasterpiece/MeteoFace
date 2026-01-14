@@ -15,7 +15,7 @@
 
     <div class="brand-box">METEOFACE | ANALİZ</div>
 
-    <div id="loader">Veriler İndiriliyor...</div>
+    <div id="loader">Sistem Başlatılıyor...</div>
 
     <div class="style-dock">
         <button onclick="changeStyle('dark')" class="style-btn active" title="Karanlık">
@@ -29,11 +29,16 @@
         </button>
     </div>
 
+    <div class="opacity-box">
+        <div class="opacity-label"><i class="fa-solid fa-eye"></i> GÖRÜNÜRLÜK</div>
+        <input type="range" id="opacity-slider" min="0" max="1" step="0.1" value="1">
+    </div>
+
     <div id="legend-box">
         <div class="legend-title">SICAKLIK (°C)</div>
         <div class="legend-bar" id="legend-gradient"></div>
         <div class="legend-labels" id="legend-labels">
-            <span>-10</span><span>0</span><span>10</span><span>20</span><span>30</span><span>40+</span>
+            <span>-15</span><span>-5</span><span>0</span><span>10</span><span>20</span><span>30</span>
         </div>
     </div>
 
@@ -55,11 +60,8 @@
     </div>
 
     <div class="control-dock">
-                <button class="dock-btn" onclick="setMode('code')" id="btn-code">
-            <i class="fa-solid fa-cloud"></i> Hadise
-        </button>
         <button class="dock-btn active" onclick="setMode('temp')" id="btn-temp">
-            <i class="fa-solid fa-temperature-half"></i> Sıcaklık
+            <i class="fa-solid fa-temperature-half"></i> Isı
         </button>
         <button class="dock-btn" onclick="setMode('wind')" id="btn-wind">
             <i class="fa-solid fa-wind"></i> Rüzgar
@@ -67,7 +69,9 @@
         <button class="dock-btn" onclick="setMode('pressure')" id="btn-pressure">
             <i class="fa-solid fa-gauge-high"></i> Basınç
         </button>
-
+        <button class="dock-btn" onclick="setMode('code')" id="btn-code">
+            <i class="fa-solid fa-cloud"></i> Hadise
+        </button>
     </div>
 
     <div id="map"></div>
@@ -77,6 +81,4 @@
     <script src="app.js"></script>
 
 </body>
-
 </html>
-
