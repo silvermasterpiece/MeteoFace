@@ -1,5 +1,5 @@
 // --- AYARLAR ---
-const MAPBOX_TOKEN = 'pk.eyJ1IjoibXltYXN0ZXJwaWVjZSIsImEiOiJjbWthNHZmbzAxbnFwM2VxczR6bnFvZmp0In0.bH-yeHL1xeCQswDehy6AsA'; // Tokenini buraya yapıştır!
+const MAPBOX_TOKEN = 'pk.eyJ1IjoibXltYXN0ZXJwaWVjZSIsImEiOiJjbWtkeTVldWkwMTd5M2VxdG85ZWNuMTRjIn0.PT21F_ySshsLGTIiVJB-gg'; // Tokenini buraya yapıştır!
 
 mapboxgl.accessToken = MAPBOX_TOKEN;
 
@@ -378,4 +378,5 @@ setInterval(async () => {
         await fetchWeatherData(activeCities);
     }
     updateMapState();
+
 }, 1000 * 60 * 30);
