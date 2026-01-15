@@ -55,7 +55,7 @@ Bu proje, herhangi bir Backend (Sunucu) bağımlılığı olmadan, tamamen **Van
 **SilverMasterpiece**
 
 * [GitHub Profilim](https://github.com/silvermasterpiece)
-* [LinkedIn Profilim]([https://linkedin.com/in/kullaniciadin](https://www.linkedin.com/in/an%C4%B1l-g%C3%BCm%C3%BC%C5%9F-39a4a0256/))
+* [LinkedIn Profilim](https://www.linkedin.com/in/an%C4%B1l-g%C3%BCm%C3%BC%C5%9F-39a4a0256)
 
 ---
 
