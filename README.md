@@ -8,7 +8,6 @@
 **MeteoFace**, modern web teknolojileri kullanılarak geliştirilmiş, 3D küre üzerinde çalışan interaktif bir meteorolojik analiz panelidir. Standart hava durumu uygulamalarının aksine, **izobar (eş basınç) analizi**, **rüzgar vektörleri** ve **atmosferik tahminleri** görselleştirerek profesyonel bir deneyim sunar.
 
 [🔴 CANLI DEMO İÇİN TIKLA](https://silvermasterpiece.github.io/MeteoFace/) 
-*(Buraya kendi GitHub Pages linkini ekleyeceksin)*
 
 ---
 
@@ -45,32 +44,6 @@ Bu proje, herhangi bir Backend (Sunucu) bağımlılığı olmadan, tamamen **Van
 
 ---
 
-## 🚀 Kurulum ve Çalıştırma
-
-Projeyi kendi bilgisayarınızda çalıştırmak için aşağıdaki adımları izleyin:
-
-1.  **Repoyu Klonlayın:**
-    ```bash
-    git clone [https://github.com/silvermasterpiece/MeteoFace.git](https://github.com/silvermasterpiece/MeteoFace.git)
-    cd MeteoFace
-    ```
-
-2.  **API Anahtarı (Token) Ayarı:**
-    * Bu proje [Mapbox](https://www.mapbox.com/) altyapısını kullanır.
-    * `app.js` dosyasını açın.
-    * `const MAPBOX_TOKEN = 'BURAYA_TOKEN_GELECEK';` satırına kendi Mapbox Public Token'ınızı yapıştırın.
-
-3.  **Çalıştırma (Önemli!):**
-    * Mapbox güvenlik politikaları gereği (CORS), proje doğrudan `index.html` dosyasına çift tıklanarak **çalışmaz.**
-    * VS Code kullanıyorsanız **"Live Server"** eklentisi ile çalıştırın.
-    * Veya terminalde basit bir Python sunucusu başlatın:
-        ```bash
-        python -m http.server 5500
-        ```
-    * Tarayıcıda `http://localhost:5500` adresine gidin.
-
----
-
 ## 🗺️ Yol Haritası (Gelecek Planları)
 
 - [ ] **Havacılık Modu:** METAR/TAF verilerinin havalimanları üzerine işlenmesi.
@@ -84,7 +57,7 @@ Projeyi kendi bilgisayarınızda çalıştırmak için aşağıdaki adımları i
 **SilverMasterpiece**
 
 * [GitHub Profilim](https://github.com/silvermasterpiece)
-* [LinkedIn Profilim](https://linkedin.com/in/kullaniciadin) *(Varsa ekle)*
+* [LinkedIn Profilim]([https://linkedin.com/in/kullaniciadin](https://www.linkedin.com/in/an%C4%B1l-g%C3%BCm%C3%BC%C5%9F-39a4a0256/))
 
 ---
 
