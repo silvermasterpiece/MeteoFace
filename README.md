@@ -46,7 +46,6 @@ Bu proje, herhangi bir Backend (Sunucu) bağımlılığı olmadan, tamamen **Van
 
 - [ ] **Havacılık Modu:** METAR/TAF verilerinin havalimanları üzerine işlenmesi.
 - [ ] **Radar Katmanı:** Yağış bulutlarının harita üzerine hareketli (GIF) olarak eklenmesi.
-- [ ] **Uyarı Sistemi:** Belirli bir eşiğin (Örn: -5°C) altındaki iller için görsel alarm.
 
 ---
 
