@@ -13,20 +13,21 @@ const MAP_STYLES = {
 };
 
 const map = new mapboxgl.Map({
-    container: 'map',
-    style: MAP_STYLES.dark,
-    center: [35.0, 39.0],
-    zoom: 4,
-    projection: 'globe'
+    container: 'map', 
+    style: MAP_STYLES.dark, 
+    center: [35.0, 39.0], 
+    zoom: 4, 
+    projection: 'globe' 
 });
 
 // GLOBAL DEĞİŞKENLER
-let weatherCache = {};
+let weatherCache = {}; 
 let markers = [];
-let pressureMarkers = [];
-let activePopup = null; // Açık olan popup'ı takip etmek için
-let currentMode = 'temp';
-let timeIndex = 0;
+let pressureMarkers = []; 
+let activePopup = null; 
+// DEĞİŞİKLİK BURADA: Varsayılan mod artık 'code' (Hadise)
+let currentMode = 'code'; 
+let timeIndex = 0; 
 let isPlaying = false;
 let playInterval = null;
 let moveTimeout = null;
@@ -39,35 +40,30 @@ const timeDisplay = document.getElementById('time-display');
 const playBtn = document.getElementById('play-btn');
 
 map.on('load', async () => {
-    // Siyah atmosfer efekti
     map.setFog({ 'range': [0.5, 10], 'color': '#000000', 'high-color': '#1a1d29' });
-
     document.getElementById('loader').style.display = 'block';
-
-    // Isı Haritası Katmanını Kur
+    
     setupHeatmapLayer();
 
-    if (activeCities.length === 0) { alert("Hata: data.js bulunamadı."); return; }
+    if(activeCities.length === 0) { alert("Hata: data.js bulunamadı."); return; }
 
-    // İlk verileri çek
     await fetchWeatherData(activeCities);
-
-    slider.value = 0;
+    
+    slider.value = 0; 
     timeIndex = 0;
-
-    updateLegend('temp');
+    
+    // DEĞİŞİKLİK BURADA: İlk açılışta Hadise legend ayarı çalışsın
+    updateLegend('code');
     updateMapState();
 
     slider.disabled = false;
     document.getElementById('loader').style.display = 'none';
 
-    // Dinamik Keşif
     map.on('moveend', () => {
         clearTimeout(moveTimeout);
         moveTimeout = setTimeout(scanAndFetchNewCities, 500);
     });
 
-    // Haritanın boş bir yerine tıklayınca popup kapansın
     map.on('click', () => {
         if (activePopup) {
             activePopup.remove();
@@ -78,79 +74,68 @@ map.on('load', async () => {
 
 // --- ISI HARİTASI (HEATMAP) KURULUMU ---
 function setupHeatmapLayer() {
-    // 1. Veri Kaynağı
     map.addSource('pressure-source', {
         type: 'geojson',
         data: { type: 'FeatureCollection', features: [] }
     });
 
-    // 2. Bulanık Daireler Katmanı (Heatmap Efekti)
     map.addLayer({
         id: 'pressure-heat',
         type: 'circle',
         source: 'pressure-source',
-        layout: { 'visibility': 'none' },
+        layout: { 'visibility': 'none' }, 
         paint: {
-            // Zoom seviyesine göre daire boyutu
             'circle-radius': [
                 'interpolate', ['linear'], ['zoom'],
-                3, 80,
-                6, 200
+                3, 80,  
+                6, 200  
             ],
-            'circle-blur': 1.5, // Maksimum bulanıklık (Bulut efekti)
+            'circle-blur': 1.5,
             'circle-opacity': 0.5,
-            // RENK SKALASI (Basınca göre renk değişimi)
             'circle-color': [
                 'interpolate', ['linear'], ['get', 'pressure'],
-                990, '#d50000',      // Fırtına -> Koyu Kırmızı
-                1005, '#ff5252',     // AB -> Açık Kırmızı
-                1013, 'transparent', // Normal -> Görünmez
-                1020, '#42a5f5',     // YB -> Açık Mavi
-                1035, '#1565c0'      // Yüksek YB -> Koyu Mavi
+                990, '#d50000', 1005, '#ff5252', 1013, 'transparent', 1020, '#42a5f5', 1035, '#1565c0'
             ]
         }
-    }, 'settlement-label'); // Şehir isimlerinin altında kalsın
+    }, 'settlement-label');
 }
 
 // --- HARİTA GÜNCELLEME ---
 function updateMapState() {
     const sampleKey = Object.keys(weatherCache)[0];
     const sampleData = weatherCache[sampleKey];
-
-    // Zaman Göstergesi
+    
     if (timeIndex === 0) {
         timeDisplay.innerHTML = '<span style="color:#00e676"><i class="fa-solid fa-circle-dot"></i> CANLI</span>';
     } else if (sampleData && sampleData.hourly && sampleData.hourly.time) {
         const timeString = sampleData.hourly.time[timeIndex];
         const dateObj = new Date(timeString);
-        const formattedTime = dateObj.toLocaleDateString('tr-TR', { weekday: 'long', hour: '2-digit', minute: '2-digit' });
+        const formattedTime = dateObj.toLocaleDateString('tr-TR', { weekday: 'long', hour: '2-digit', minute:'2-digit' });
         timeDisplay.innerText = formattedTime;
     }
-
+    
     renderMarkers();
-    updateHeatmap(); // Heatmap ve Basınç Merkezlerini güncelle
+    updateHeatmap();
 }
 
 // --- ISI HARİTASI VERİ GÜNCELLEME ---
 function updateHeatmap() {
-    // Sadece Basınç modundaysak çalış
     if (currentMode !== 'pressure') {
-        if (map.getLayer('pressure-heat')) map.setLayoutProperty('pressure-heat', 'visibility', 'none');
+        if(map.getLayer('pressure-heat')) map.setLayoutProperty('pressure-heat', 'visibility', 'none');
         removePressureMarkers();
         return;
     }
-
-    if (map.getLayer('pressure-heat')) map.setLayoutProperty('pressure-heat', 'visibility', 'visible');
+    
+    if(map.getLayer('pressure-heat')) map.setLayoutProperty('pressure-heat', 'visibility', 'visible');
 
     const features = [];
-
+    
     activeCities.forEach(city => {
         const cityKey = `${city.lat.toFixed(2)},${city.lon.toFixed(2)}`;
         const data = weatherCache[cityKey];
         if (!data) return;
 
         let pressure;
-        // MSL Basınç Kullanıyoruz
         if (timeIndex === 0 && data.current) pressure = data.current.pressure_msl;
         else if (data.hourly && data.hourly.pressure_msl) {
             const i = timeIndex;
@@ -166,21 +151,18 @@ function updateHeatmap() {
         }
     });
 
-    // Veriyi GPU'ya gönder
     map.getSource('pressure-source').setData({
         type: 'FeatureCollection',
         features: features
     });
 
-    // Çoklu Basınç Merkezlerini Hesapla
     updatePressureCenters();
 }
 
-// --- ÇOKLU BASINÇ MERKEZİ TESPİTİ (Lokal Min/Max) ---
+// --- ÇOKLU BASINÇ MERKEZİ TESPİTİ ---
 function updatePressureCenters() {
     removePressureMarkers();
 
-    // 1. Veri Hazırlığı
     let points = [];
     activeCities.forEach(city => {
         const cityKey = `${city.lat.toFixed(2)},${city.lon.toFixed(2)}`;
@@ -201,69 +183,61 @@ function updatePressureCenters() {
 
     if (points.length < 5) return;
 
-    // 2. Lokal Tepe ve Dip Noktaları Bul
-    const SEARCH_RADIUS = 600; // km (Tarama yarıçapı)
+    const SEARCH_RADIUS = 600; 
     const centers = [];
 
     points.forEach(center => {
-        let isLow = true;  // AB Adayı
-        let isHigh = true; // YB Adayı
+        let isLow = true;  
+        let isHigh = true; 
         let neighborCount = 0;
 
         points.forEach(neighbor => {
             if (center === neighbor) return;
-
-            // Performans için kaba eleme
             if (Math.abs(center.lat - neighbor.lat) + Math.abs(center.lon - neighbor.lon) > 15) return;
 
             const dist = getDistanceFromLatLonInKm(center.lat, center.lon, neighbor.lat, neighbor.lon);
-
+            
             if (dist < SEARCH_RADIUS) {
                 neighborCount++;
-                if (neighbor.p <= center.p) isLow = false;
-                if (neighbor.p >= center.p) isHigh = false;
+                if (neighbor.p <= center.p) isLow = false; 
+                if (neighbor.p >= center.p) isHigh = false; 
             }
         });
 
-        if (neighborCount < 2) return; // İzole nokta ise atla
+        if (neighborCount < 2) return; 
 
         if (isLow) centers.push({ type: 'AB', ...center });
         else if (isHigh) centers.push({ type: 'YB', ...center });
     });
 
-    // 3. Birbirine Çok Yakın Olanları Filtrele
-    const finalCenters = filterCloseCenters(centers, 400);
+    const finalCenters = filterCloseCenters(centers, 400); 
 
-    // 4. Haritaya Bas
     finalCenters.forEach(c => {
         const el = document.createElement('div');
         el.className = `pressure-center ${c.type.toLowerCase()}`;
         el.innerHTML = `${c.type}<div style="font-size:10px">${Math.round(c.p)}</div>`;
-
+        
         const marker = new mapboxgl.Marker({ element: el })
             .setLngLat([c.lon, c.lat])
             .addTo(map);
-
+        
         pressureMarkers.push(marker);
     });
 }
 
-// --- YARDIMCI MATEMATİK FONKSİYONLARI ---
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-    var R = 6371; // Dünya yarıçapı (km)
-    var dLat = deg2rad(lat2 - lat1);
-    var dLon = deg2rad(lon2 - lon1);
-    var a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    var d = R * c;
-    return d;
+  var R = 6371; 
+  var dLat = deg2rad(lat2-lat1);  
+  var dLon = deg2rad(lon2-lon1); 
+  var a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2); 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var d = R * c; 
+  return d;
 }
 
-function deg2rad(deg) {
-    return deg * (Math.PI / 180);
-}
+function deg2rad(deg) { return deg * (Math.PI/180); }
 
 function filterCloseCenters(centers, minDistance) {
     const result = [];
@@ -283,11 +257,11 @@ function removePressureMarkers() {
     pressureMarkers = [];
 }
 
-// --- NORMAL MARKER RENDER (POPUP DÜZENLEMESİ İLE) ---
+// --- NORMAL MARKER RENDER ---
 function renderMarkers() {
     markers.forEach(m => m.remove());
     markers = [];
-
+    
     activeCities.forEach((city) => {
         const cityKey = `${city.lat.toFixed(2)},${city.lon.toFixed(2)}`;
         const data = weatherCache[cityKey];
@@ -303,11 +277,11 @@ function renderMarkers() {
             windSpeed = data.current.wind_speed_10m;
             windDir = data.current.wind_direction_10m;
             wCode = data.current.weather_code;
-            pressure = data.current.pressure_msl;
-            isDay = data.current.is_day; // Gece/Gündüz verisi
+            pressure = data.current.pressure_msl; 
+            isDay = data.current.is_day; 
         } else {
             if (!data.hourly || !data.hourly.temperature_2m) return;
-            const i = timeIndex;
+            const i = timeIndex; 
             if (i >= data.hourly.temperature_2m.length) return;
             temp = data.hourly.temperature_2m[i];
             feelsLike = data.hourly.apparent_temperature ? data.hourly.apparent_temperature[i] : temp;
@@ -315,8 +289,7 @@ function renderMarkers() {
             windSpeed = data.hourly.wind_speed_10m[i];
             windDir = data.hourly.wind_direction_10m[i];
             wCode = data.hourly.weather_code[i];
-            pressure = data.hourly.pressure_msl[i];
-            // Tahmin modunda saati kontrol edip manuel gündüz/gece tahmini
+            pressure = data.hourly.pressure_msl[i]; 
             const forecastHour = new Date(data.hourly.time[i]).getHours();
             isDay = (forecastHour >= 6 && forecastHour <= 19) ? 1 : 0;
         }
@@ -324,7 +297,7 @@ function renderMarkers() {
         const el = document.createElement('div');
         el.className = 'city-marker';
         el.style.opacity = markerOpacity;
-
+        
         let htmlContent = '';
         if (currentMode === 'temp') {
             let color = temp < 0 ? '#4fc3f7' : (temp < 15 ? '#66bb6a' : (temp < 30 ? '#fdd835' : '#ff5252'));
@@ -335,7 +308,6 @@ function renderMarkers() {
             htmlContent = `<i class="fa-solid fa-arrow-up wind-arrow" style="transform: rotate(${windDir}deg); color: ${color}; text-shadow: 0 0 5px ${color};"></i>`;
         }
         else if (currentMode === 'code') {
-            // Gece/Gündüz destekli İkon Çağır
             htmlContent = `<div class="icon-box">${getAnimatedIcon(wCode, isDay)}</div>`;
         }
         else if (currentMode === 'pressure') {
@@ -345,34 +317,33 @@ function renderMarkers() {
         htmlContent += `<div class="city-name">${city.n}</div>`;
         el.innerHTML = htmlContent;
 
-        // --- MODERN POPUP VE AÇ/KAPA MANTIĞI ---
+        // --- POPUP ---
         el.addEventListener('click', (e) => {
-            e.stopPropagation(); // Haritaya tıklanmasını engelle
+             e.stopPropagation(); 
+             
+             if (activePopup) {
+                 const isOpen = activePopup._content.innerHTML.includes(city.n);
+                 activePopup.remove();
+                 activePopup = null;
+                 if (isOpen) return;
+             }
 
-            // 1. AÇIK POPUP VAR MI KONTROL ET
-            if (activePopup) {
-                // Eğer tıklanan zaten açıksa, kapat ve çık (Toggle)
-                const isOpen = activePopup._content.innerHTML.includes(city.n);
-                activePopup.remove();
-                activePopup = null;
-                if (isOpen) return;
-            }
-
-            // 2. YENİ MODERN HTML İÇERİĞİ
-            // Popup içindeki ikon daha büyük (64px) olsun
-            const animatedIcon = getAnimatedIcon(wCode, isDay).replace('width="40" height="40"', 'width="64" height="64"');
-
-            const popupHTML = `
+             const animatedIcon = getAnimatedIcon(wCode, isDay).replace('width="40" height="40"', 'width="64" height="64"');
+             
+             const popupHTML = `
                 <div class="card-header">
                     <div class="card-city">${city.n}</div>
-                    <div class="card-status">${timeIndex === 0 ? 'Canlı' : 'Tahmin'}</div>
+                    <div class="card-status">${timeIndex===0 ? 'Canlı' : 'Tahmin'}</div>
                 </div>
                 <div class="card-body">
+                    
                     <div class="card-main">
                         <div class="card-temp">${Math.round(temp)}°</div>
-                        <div class="card-icon-big">${animatedIcon}</div>
+                        <div class="card-visual-group">
+                            <div class="card-icon-big">${animatedIcon}</div>
+                            <div class="card-desc">${getWeatherDesc(wCode)}</div>
+                        </div>
                     </div>
-                    <div class="card-desc">${getWeatherDesc(wCode)}</div>
                     
                     <div class="card-grid">
                         <div class="card-item">
@@ -406,24 +377,22 @@ function renderMarkers() {
                     </div>
                 </div>
             `;
+             
+             const isMobile = window.innerWidth < 768;
 
-            // 3. YENİ POPUP'I AÇ VE KAYDET (MOBİL UYUMLU GENİŞLİK)
-            const isMobile = window.innerWidth < 768;
-
-            activePopup = new mapboxgl.Popup({
-                offset: 25,
-                closeButton: true,
-                maxWidth: isMobile ? '90vw' : '300px', // Mobilde %90, PC'de 300px
-                className: 'custom-popup'
-            })
-                .setLngLat([city.lon, city.lat])
-                .setHTML(popupHTML)
-                .addTo(map);
-
-            // Popup çarpı tuşuna basılıp kapanırsa değişkeni sıfırla
-            activePopup.on('close', () => {
-                activePopup = null;
-            });
+             activePopup = new mapboxgl.Popup({
+                 offset: 25, 
+                 closeButton: true, 
+                 maxWidth: isMobile ? '90vw' : '300px', 
+                 className: 'custom-popup'
+             })
+             .setLngLat([city.lon, city.lat])
+             .setHTML(popupHTML)
+             .addTo(map);
+             
+             activePopup.on('close', () => {
+                 activePopup = null;
+             });
         });
 
         const marker = new mapboxgl.Marker({ element: el, anchor: 'center' }).setLngLat([city.lon, city.lat]).addTo(map);
@@ -442,27 +411,27 @@ async function fetchWeatherData(cityList) {
     const batch = citiesToFetch.slice(0, 50);
     const lats = batch.map(c => c.lat.toFixed(2)).join(',');
     const lons = batch.map(c => c.lon.toFixed(2)).join(',');
-
+    
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,wind_direction_10m,pressure_msl&hourly=temperature_2m,wind_speed_10m,wind_direction_10m,weather_code,pressure_msl,apparent_temperature,relativehumidity_2m&forecast_days=3&wind_speed_unit=kmh&timezone=auto`;
 
     try {
         const res = await fetch(url);
         const data = await res.json();
         const rawDataArray = Array.isArray(data) ? data : [data];
-
+        
         rawDataArray.forEach((cityData, index) => {
             const cityKey = `${batch[index].lat.toFixed(2)},${batch[index].lon.toFixed(2)}`;
             weatherCache[cityKey] = processCityData(cityData);
         });
 
     } catch (e) { console.error("Veri Hatası:", e); }
-
+    
     isFetching = false;
 }
 
 function processCityData(data) {
     if (!data) return null;
-    const currentHourIndex = new Date().getHours();
+    const currentHourIndex = new Date().getHours(); 
     const slicedHourly = {};
     if (data.hourly) {
         Object.keys(data.hourly).forEach(key => {
@@ -482,7 +451,7 @@ async function scanAndFetchNewCities() {
     if (!features.length) return;
     const newCitiesFound = [];
     features.forEach(f => {
-        const name = f.properties.name_tr || f.properties.name;
+        const name = f.properties.name_tr || f.properties.name; 
         const alreadyExists = activeCities.some(c => c.n === name);
         if (name && !alreadyExists) {
             const newCity = { n: name, lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0] };
@@ -599,15 +568,15 @@ function getWeatherDesc(code) {
     if (code === 0) return "Açık";
     if (code <= 3) return "Parçalı Bulutlu";
     if (code <= 48) return "Sisli";
-    if (code <= 57) return "Çiseleme";
+    if (code <= 57) return "Çiseleme"; 
     if (code <= 67) return "Yağmurlu";
     if (code <= 77) return "Karlı";
-    if (code >= 96) return "Dolu / Fırtına";
+    if (code >= 96) return "Dolu / Fırtına"; 
     if (code >= 95) return "Fırtına";
     return "Bulutlu";
 }
 
-window.togglePlay = function () {
+window.togglePlay = function() {
     isPlaying = !isPlaying;
     const icon = playBtn.querySelector('i');
     if (isPlaying) {
@@ -617,18 +586,18 @@ window.togglePlay = function () {
 };
 function stopPlay() { isPlaying = false; clearInterval(playInterval); const icon = playBtn.querySelector('i'); icon.classList.remove('fa-pause'); icon.classList.add('fa-play'); }
 slider.addEventListener('input', (e) => { if (isPlaying) stopPlay(); timeIndex = parseInt(e.target.value); updateMapState(); });
-window.setMode = function (mode) { currentMode = mode; document.querySelectorAll('.dock-btn').forEach(b => b.classList.remove('active')); document.getElementById('btn-' + mode).classList.add('active'); updateLegend(mode); updateMapState(); }
+window.setMode = function(mode) { currentMode = mode; document.querySelectorAll('.dock-btn').forEach(b => b.classList.remove('active')); document.getElementById('btn-' + mode).classList.add('active'); updateLegend(mode); updateMapState(); }
 function updateLegend(mode) {
     const box = document.getElementById('legend-box'); const title = document.querySelector('.legend-title'); const bar = document.getElementById('legend-gradient'); const labels = document.getElementById('legend-labels');
     if (mode === 'code') { box.style.opacity = '0'; return; } box.style.opacity = '1';
     if (mode === 'temp') { title.innerText = "SICAKLIK (°C)"; bar.style.background = "linear-gradient(to right, #81d4fa, #4fc3f7, #66bb6a, #fdd835, #ff7043, #ff5252)"; labels.innerHTML = "<span>-10</span><span>0</span><span>10</span><span>20</span><span>30</span><span>40</span>"; }
     else if (mode === 'wind') { title.innerText = "RÜZGAR (km/h)"; bar.style.background = "linear-gradient(to right, #69f0ae, #ffff00, #ff5252, #d50000)"; labels.innerHTML = "<span>0</span><span>20</span><span>40</span><span>60</span><span>80+</span>"; }
     else if (mode === 'pressure') { title.innerText = "BASINÇ (hPa)"; bar.style.background = "linear-gradient(to right, #d50000, #ff5252, transparent, #42a5f5, #1565c0)"; labels.innerHTML = "<span>990</span><span>1000</span><span>1013</span><span>1020</span><span>1035</span>"; }
-    window.changeStyle = function (styleKey) {
+    window.changeStyle = function(styleKey) {
         const icons = { 'dark': 'fa-moon', 'light': 'fa-sun', 'satellite': 'fa-earth-europe' }; const clickedBtn = document.querySelector(`.style-btn i.${icons[styleKey]}`).parentElement;
         document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active')); clickedBtn.classList.add('active');
         map.setStyle(MAP_STYLES[styleKey]);
-        map.once('style.load', () => { if (styleKey === 'light') map.setFog({ 'range': [0.5, 10], 'color': '#ffffff', 'high-color': '#e6f2ff', 'space-color': '#d9eaff' }); else map.setFog({ 'range': [0.5, 10], 'color': '#000000', 'high-color': '#1a1d29' }); setupHeatmapLayer(); setTimeout(updateMapState, 500); });
+        map.once('style.load', () => { if(styleKey === 'light') map.setFog({ 'range': [0.5, 10], 'color': '#ffffff', 'high-color': '#e6f2ff', 'space-color': '#d9eaff' }); else map.setFog({ 'range': [0.5, 10], 'color': '#000000', 'high-color': '#1a1d29' }); setupHeatmapLayer(); setTimeout(updateMapState, 500); });
     };
 }
 

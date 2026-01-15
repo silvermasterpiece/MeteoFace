@@ -4,41 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MeteoFace - Pro Analiz</title>
+    
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        .flag-img {
+            width: 24px;
+            height: 16px;
+            border-radius: 4px; /* Köşeleri yumuşat */
+            box-shadow: 0 0 5px rgba(229, 57, 53, 0.8); /* Kırmızı parlama */
+            vertical-align: middle;
+            margin-left: 8px;
+            display: inline-block;
+        }
+        
+        /* Buton içindeki bayrak biraz daha büyük olsun */
+        .style-btn .flag-img {
+            width: 28px;
+            height: 19px;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
 
-    <div class="brand-box">METEOFACE | ANALİZ</div>
+    <div class="brand-box">
+        <i class="fa-solid fa-globe" style="color: #4fc3f7;"></i> MeteoFace 
+        <img src="https://flagcdn.com/w40/tr.png" alt="Türkiye" class="flag-img">
+    </div>
 
     <a href="https://github.com/silvermasterpiece" target="_blank" class="signature-box">
         <i class="fa-solid fa-code"></i> Developed by <span class="sig-name">SilverMasterpiece</span>
     </a>
+
     <div id="loader">Sistem Başlatılıyor...</div>
 
     <div class="style-dock">
         <button onclick="loadTurkey()" class="style-btn" title="Türkiye Geneli">
-            <span style="font-weight:900; color:#fff; font-size:12px;">TR</span>
+            <img src="https://flagcdn.com/w40/tr.png" alt="TR" class="flag-img">
         </button>
-        <button onclick="changeStyle('dark')" class="style-btn active" title="Karanlık">
+        
+        <button onclick="changeStyle('dark')" class="style-btn active" title="Karanlık Mod">
             <i class="fa-solid fa-moon"></i>
         </button>
-        <button onclick="changeStyle('satellite')" class="style-btn" title="Uydu">
+        <button onclick="changeStyle('satellite')" class="style-btn" title="Uydu Modu">
             <i class="fa-solid fa-earth-europe"></i>
         </button>
-        <button onclick="changeStyle('light')" class="style-btn" title="Aydınlık">
+        <button onclick="changeStyle('light')" class="style-btn" title="Aydınlık Mod">
             <i class="fa-solid fa-sun"></i>
         </button>
     </div>
 
     <div id="legend-box">
-        <div class="legend-title">SICAKLIK (°C)</div>
+        <div class="legend-title">HAVA DURUMU</div>
         <div class="legend-bar" id="legend-gradient"></div>
         <div class="legend-labels" id="legend-labels">
-            <span>-15</span><span>-5</span><span>0</span><span>10</span><span>20</span><span>30</span>
-        </div>
+            </div>
     </div>
 
     <div class="time-control-box">
@@ -57,23 +84,21 @@
     </div>
 
     <div class="control-dock">
-        <button class="dock-btn" onclick="setMode('code')" id="btn-code">
-            <i class="fa-solid fa-cloud"></i> Hadise
+        <button class="dock-btn active" onclick="setMode('code')" id="btn-code">
+            <i class="fa-solid fa-cloud"></i> <span>Hadise</span>
         </button>
-        <button class="dock-btn active" onclick="setMode('temp')" id="btn-temp">
-            <i class="fa-solid fa-temperature-half"></i> Sıcaklık
+        <button class="dock-btn" onclick="setMode('temp')" id="btn-temp">
+            <i class="fa-solid fa-temperature-half"></i> <span>Sıcaklık</span>
         </button>
         <button class="dock-btn" onclick="setMode('wind')" id="btn-wind">
-            <i class="fa-solid fa-wind"></i> Rüzgar
+            <i class="fa-solid fa-wind"></i> <span>Rüzgar</span>
         </button>
         <button class="dock-btn" onclick="setMode('pressure')" id="btn-pressure">
-            <i class="fa-solid fa-gauge-high"></i> Basınç
+            <i class="fa-solid fa-gauge-high"></i> <span>Basınç</span>
         </button>
     </div>
 
     <div id="map"></div>
-
-    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
     <script src="data.js"></script>

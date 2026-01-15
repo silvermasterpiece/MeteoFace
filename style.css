@@ -29,9 +29,20 @@ body {
     font-size: 16px;
     font-weight: 800;
     letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* İkon, Yazı ve Bayrak arası boşluk */
 }
 
-/* --- STİL MENÜSÜ --- */
+/* Logo içindeki bayrak */
+.brand-box .flag-img {
+    width: 24px;
+    height: 16px;
+    border-radius: 3px;
+    box-shadow: 0 0 5px rgba(229, 57, 53, 0.6);
+}
+
+/* --- STİL MENÜSÜ (SAĞ ÜST) --- */
 .style-dock {
     position: absolute;
     top: 25px;
@@ -46,19 +57,23 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* BUTON AYARLARI (KRİTİK DÜZELTME BURADA) */
 .style-btn {
     background: transparent;
     border: none;
     color: #aaa;
-    width: 36px;
-    height: 36px;
+    width: 40px;  /* Genişliği sabitledik */
+    height: 40px; /* Yüksekliği sabitledik */
     border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 18px; /* İkon boyutu */
     transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    
+    /* İçindekini tam ortala (Flexbox) */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important; /* İç boşluğu sıfırla */
 }
 
 .style-btn:hover {
@@ -70,6 +85,15 @@ body {
     background: #f1c40f;
     color: #000;
     box-shadow: 0 0 10px rgba(241, 196, 15, 0.4);
+}
+
+/* Butonun içindeki Bayrak Resmi */
+.style-btn .flag-img {
+    width: 26px; /* Buton içine sığacak boyut */
+    height: auto;
+    border-radius: 3px;
+    filter: drop-shadow(0 0 4px rgba(255,255,255,0.3));
+    display: block; /* Satır kaymasını önle */
 }
 
 /* --- ALT MENÜ --- */
@@ -114,17 +138,9 @@ body {
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-.dock-btn.active i.fa-temperature-half {
-    color: #fdd835;
-}
-
-.dock-btn.active i.fa-wind {
-    color: #4fc3f7;
-}
-
-.dock-btn.active i.fa-cloud {
-    color: #a5d6a7;
-}
+.dock-btn.active i.fa-temperature-half { color: #fdd835; }
+.dock-btn.active i.fa-wind { color: #4fc3f7; }
+.dock-btn.active i.fa-cloud { color: #a5d6a7; }
 
 /* --- ZAMAN KONTROL --- */
 .time-control-box {
@@ -201,10 +217,7 @@ input[type=range] {
     background: transparent;
     cursor: pointer;
 }
-
-input[type=range]:focus {
-    outline: none;
-}
+input[type=range]:focus { outline: none; }
 
 input[type=range]::-webkit-slider-runnable-track {
     width: 100%;
@@ -224,9 +237,7 @@ input[type=range]::-webkit-slider-thumb {
     transition: transform 0.1s;
 }
 
-input[type=range]::-webkit-slider-thumb:hover {
-    transform: scale(1.2);
-}
+input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
 
 /* --- RENK SKALASI --- */
 #legend-box {
@@ -266,19 +277,6 @@ input[type=range]::-webkit-slider-thumb:hover {
     font-size: 10px;
     font-weight: 700;
     color: #fff;
-}
-
-@media (max-width: 600px) {
-    #legend-box {
-        bottom: 170px;
-        right: 20px;
-        width: 160px;
-    }
-
-    .dock-btn {
-        padding: 10px 12px;
-        font-size: 11px;
-    }
 }
 
 /* --- MARKER VE SAYILAR --- */
@@ -323,253 +321,12 @@ input[type=range]::-webkit-slider-thumb:hover {
     filter: drop-shadow(0 2px 4px black);
 }
 
-/* --- POPUP KARTI (DETAYLI) --- */
-.mapboxgl-popup {
-    z-index: 99999;
-}
+/* --- POPUP KARTI --- */
+.mapboxgl-popup { z-index: 99999; }
 
 .mapboxgl-popup-content {
-    background: rgba(16, 18, 27, 0.95);
+    background: rgba(16, 18, 27, 0.95) !important;
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 0;
-    overflow: hidden;
-    color: #fff;
-    font-family: 'Inter', sans-serif;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-    min-width: 200px;
-}
-
-.mapboxgl-popup-tip {
-    border-top-color: rgba(16, 18, 27, 0.95);
-}
-
-.pop-header {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 10px;
-    font-weight: 800;
-    text-align: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    letter-spacing: 0.5px;
-}
-
-.pop-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 6px 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
-    align-items: center;
-    font-size: 12px;
-}
-
-.pop-row:last-child {
-    border-bottom: none;
-}
-
-.pop-label {
-    color: #aaa;
-    display: flex;
-    gap: 6px;
-    align-items: center;
-}
-
-.pop-val {
-    font-weight: 700;
-    color: #fff;
-}
-
-/* Loader */
-#loader {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #fff;
-    font-weight: bold;
-    font-size: 12px;
-    display: none;
-    background: rgba(0, 0, 0, 0.8);
-    padding: 10px 20px;
-    border-radius: 20px;
-    z-index: 20;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* --- GELİŞTİRİCİ İMZASI --- */
-.signature-box {
-    position: absolute;
-    top: 75px;
-    left: 25px;
-    z-index: 10;
-    text-decoration: none;
-
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(4px);
-
-    padding: 6px 12px;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-
-    display: flex;
-    align-items: center;
-    gap: 6px;
-
-    transition: all 0.3s ease;
-}
-
-/* Üzerine gelince ne olsun? */
-.signature-box:hover {
-    background: rgba(241, 196, 15, 0.15);
-    border-color: rgba(241, 196, 15, 0.4);
-    color: #fff;
-    transform: translateY(2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-.sig-name {
-    color: #f1c40f;
-    font-weight: 800;
-}
-
-/* İkon ayarı */
-.signature-box i {
-    font-size: 11px;
-}
-
-/* Mobil uyum */
-@media (max-width: 600px) {
-    .signature-box {
-        top: 65px;
-        left: 20px;
-        font-size: 9px;
-    }
-}
-
-/* --- BASINÇ MERKEZLERİ (AB / YB) --- */
-.pressure-center {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    color: white;
-    font-weight: 900;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-    z-index: 5;
-    opacity: 0.9;
-    border: 2px solid white;
-}
-
-/* Alçak Basınç (Kırmızı) */
-.pressure-center.ab {
-    background: #d50000;
-    text-shadow: 0 1px 2px black;
-}
-
-/* Yüksek Basınç (Mavi) */
-.pressure-center.yb {
-    background: #1565c0;
-    text-shadow: 0 1px 2px black;
-}
-
-/* --- HAREKETLİ İKON ANİMASYONLARI --- */
-
-/* Güneş Dönme Efekti */
-@keyframes spin { 
-    100% { transform: rotate(360deg); } 
-}
-.anm-sun { 
-    animation: spin 12s linear infinite; 
-    transform-origin: center; 
-}
-
-/* Bulut Süzülme Efekti */
-@keyframes float { 
-    0%, 100% { transform: translateY(0); } 
-    50% { transform: translateY(-3px); } 
-}
-.anm-cloud { 
-    animation: float 3s ease-in-out infinite; 
-}
-
-/* Yağmur Damlası Efekti */
-@keyframes rain-fall { 
-    0% { transform: translateY(-5px); opacity: 0; } 
-    50% { opacity: 1; }
-    100% { transform: translateY(5px); opacity: 0; } 
-}
-.anm-drop { 
-    animation: rain-fall 1s linear infinite; 
-}
-.anm-drop:nth-child(2) { animation-delay: 0.3s; }
-.anm-drop:nth-child(3) { animation-delay: 0.6s; }
-
-/* Kar Yağışı Efekti */
-@keyframes snow-fall { 
-    0% { transform: translateY(-5px); opacity: 0; } 
-    100% { transform: translateY(5px); opacity: 1; } 
-}
-.anm-flake { 
-    animation: snow-fall 2s linear infinite; 
-}
-
-/* Şimşek Çakma Efekti */
-@keyframes flash { 
-    0%, 90%, 100% { opacity: 0; } 
-    92%, 98% { opacity: 1; } 
-}
-.anm-bolt { 
-    animation: flash 3s infinite; 
-}
-
-/* İkon Taşıyıcı Kutu */
-.icon-box {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
-}
-
-/* --- YENİ EKLENEN ANİMASYONLAR --- */
-
-/* Ay Sallanma Efekti (Beşik gibi) */
-@keyframes moon-swing {
-    0%, 100% { transform: rotate(-10deg); }
-    50% { transform: rotate(10deg); }
-}
-.anm-moon {
-    animation: moon-swing 4s ease-in-out infinite;
-    transform-origin: center;
-}
-
-/* Sis Nefes Alma Efekti (Yoğunlaşıp açılma) */
-@keyframes fog-pulse {
-    0%, 100% { opacity: 0.3; transform: translateX(-2px); }
-    50% { opacity: 0.8; transform: translateX(2px); }
-}
-.anm-fog {
-    animation: fog-pulse 3s infinite alternate;
-}
-.anm-fog:nth-child(2) { animation-delay: 1s; }
-.anm-fog:nth-child(3) { animation-delay: 2s; }
-
-/* --- MODERN POPUP KART TASARIMI --- */
-
-/* Mapbox'ın varsayılan beyazlığını ve ok işaretini özelleştir */
-.mapboxgl-popup-content {
-    background: rgba(16, 18, 27, 0.95) !important; /* Koyu Transparan */
-    backdrop-filter: blur(12px); /* Buzlu Cam Efekti */
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px !important;
     padding: 0 !important;
@@ -580,9 +337,7 @@ input[type=range]::-webkit-slider-thumb:hover {
     overflow: hidden;
 }
 
-.mapboxgl-popup-tip {
-    border-top-color: rgba(16, 18, 27, 0.95) !important;
-}
+.mapboxgl-popup-tip { border-top-color: rgba(16, 18, 27, 0.95) !important; }
 
 .mapboxgl-popup-close-button {
     color: rgba(255,255,255,0.5);
@@ -591,12 +346,9 @@ input[type=range]::-webkit-slider-thumb:hover {
     top: 5px;
     z-index: 10;
 }
-.mapboxgl-popup-close-button:hover {
-    color: #fff;
-    background: transparent;
-}
+.mapboxgl-popup-close-button:hover { color: #fff; background: transparent; }
 
-/* Kart İçeriği */
+/* KART İÇERİĞİ */
 .card-header {
     background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
     padding: 15px 20px;
@@ -631,27 +383,50 @@ input[type=range]::-webkit-slider-thumb:hover {
     gap: 15px;
 }
 
-/* Ana Sıcaklık ve İkon */
+/* --- YENİ KART DÜZENİ --- */
 .card-main {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0 10px 15px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 15px;
 }
+
 .card-temp {
-    font-size: 42px;
+    font-size: 52px;
     font-weight: 900;
     background: linear-gradient(to bottom, #fff, #aaa);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     line-height: 1;
+    letter-spacing: -2px;
 }
+
+.card-visual-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
 .card-icon-big svg {
     width: 64px;
     height: 64px;
     filter: drop-shadow(0 0 15px rgba(253, 216, 53, 0.3));
 }
 
-/* Detay Izgarası */
+.card-desc {
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    color: #fdd835 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+    margin: 0 !important;
+    text-align: center;
+}
+
 .card-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -669,115 +444,137 @@ input[type=range]::-webkit-slider-thumb:hover {
     border: 1px solid rgba(255,255,255,0.05);
     transition: background 0.2s;
 }
-.card-item:hover {
-    background: rgba(255,255,255,0.08);
+.card-item:hover { background: rgba(255,255,255,0.08); }
+.card-item i { font-size: 14px; color: rgba(255,255,255,0.5); }
+.card-val { font-size: 13px; font-weight: 700; color: #eee; }
+.card-label { font-size: 10px; color: rgba(255,255,255,0.4); display: block; margin-top: 2px; }
+
+/* Loader */
+#loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-weight: bold;
+    font-size: 12px;
+    display: none;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px 20px;
+    border-radius: 20px;
+    z-index: 20;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.card-item i {
-    font-size: 14px;
-    color: rgba(255,255,255,0.5);
-}
-
-.card-val {
-    font-size: 13px;
-    font-weight: 700;
-    color: #eee;
-}
-.card-label {
+/* --- GELİŞTİRİCİ İMZASI --- */
+.signature-box {
+    position: absolute;
+    top: 75px;
+    left: 25px;
+    z-index: 10;
+    text-decoration: none;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.6);
     font-size: 10px;
-    color: rgba(255,255,255,0.4);
-    display: block;
-    margin-top: 2px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+}
+.signature-box:hover {
+    background: rgba(241, 196, 15, 0.15);
+    border-color: rgba(241, 196, 15, 0.4);
+    color: #fff;
+    transform: translateY(2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+.sig-name { color: #f1c40f; font-weight: 800; }
+.signature-box i { font-size: 11px; }
+
+/* --- BASINÇ MERKEZLERİ --- */
+.pressure-center {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: white;
+    font-weight: 900;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+    opacity: 0.9;
+    border: 2px solid white;
+}
+.pressure-center.ab { background: #d50000; text-shadow: 0 1px 2px black; }
+.pressure-center.yb { background: #1565c0; text-shadow: 0 1px 2px black; }
+
+/* --- İKON ANİMASYONLARI --- */
+@keyframes spin { 100% { transform: rotate(360deg); } }
+.anm-sun { animation: spin 12s linear infinite; transform-origin: center; }
+
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+.anm-cloud { animation: float 3s ease-in-out infinite; }
+
+@keyframes rain-fall { 0% { transform: translateY(-5px); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(5px); opacity: 0; } }
+.anm-drop { animation: rain-fall 1s linear infinite; }
+.anm-drop:nth-child(2) { animation-delay: 0.3s; }
+.anm-drop:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes snow-fall { 0% { transform: translateY(-5px); opacity: 0; } 100% { transform: translateY(5px); opacity: 1; } }
+.anm-flake { animation: snow-fall 2s linear infinite; }
+
+@keyframes flash { 0%, 90%, 100% { opacity: 0; } 92%, 98% { opacity: 1; } }
+.anm-bolt { animation: flash 3s infinite; }
+
+.icon-box {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
 }
 
-.card-desc {
-    text-align: center;
-    font-size: 11px;
-    color: rgba(255,255,255,0.5);
-    margin-top: 5px;
-    font-style: italic;
-}
+@keyframes moon-swing { 0%, 100% { transform: rotate(-10deg); } 50% { transform: rotate(10deg); } }
+.anm-moon { animation: moon-swing 4s ease-in-out infinite; transform-origin: center; }
 
-/* --- MOBİL UYUMLULUK (RESPONSIVE TASARIM) --- */
+@keyframes fog-pulse { 0%, 100% { opacity: 0.3; transform: translateX(-2px); } 50% { opacity: 0.8; transform: translateX(2px); } }
+.anm-fog { animation: fog-pulse 3s infinite alternate; }
+.anm-fog:nth-child(2) { animation-delay: 1s; }
+.anm-fog:nth-child(3) { animation-delay: 2s; }
+
+/* --- MOBİL UYUMLULUK --- */
 @media (max-width: 768px) {
-
-    /* 1. Logo ve İmza Küçültme */
-    .brand-box {
-        top: 15px;
-        left: 15px;
-        font-size: 14px;
-        padding: 6px 12px;
-    }
-    .signature-box {
-        top: 60px;
-        left: 15px;
-        font-size: 9px;
-        padding: 4px 8px;
-    }
-
-    /* 2. Sağ Üst Menü (Stil Dock) */
-    .style-dock {
-        top: 15px;
-        right: 15px;
-        padding: 4px;
-    }
-    .style-btn {
-        width: 32px;
-        height: 32px;
-        font-size: 14px;
-    }
-
-    /* 3. Lejand (Renk Skalası) - Sol Üste Taşı */
-    /* Mobilde altta yer kalmadığı için bunu sol üste, imzanın altına alıyoruz */
-    #legend-box {
-        bottom: auto;
-        top: 95px; /* İmzanın altı */
-        left: 15px;
-        right: auto;
-        width: 140px; /* Biraz küçült */
-        padding: 8px;
-    }
+    .brand-box { top: 15px; left: 15px; font-size: 14px; padding: 6px 12px; }
+    .signature-box { top: 60px; left: 15px; font-size: 9px; padding: 4px 8px; }
+    .style-dock { top: 15px; right: 15px; padding: 4px; }
+    .style-btn { width: 32px; height: 32px; font-size: 14px; }
+    .style-btn .flag-img { width: 20px; } /* Mobilde bayrağı küçült */
+    
+    #legend-box { bottom: auto; top: 95px; left: 15px; right: auto; width: 140px; padding: 8px; }
     .legend-title { font-size: 9px; }
     .legend-labels { font-size: 8px; }
-
-    /* 4. Zaman Çubuğu (Slider) */
-    .time-control-box {
-        bottom: 85px; /* Alt menünün hemen üstüne */
-        width: 95%; /* Kenarlara yasla */
-        padding: 10px 15px;
-    }
+    .time-control-box { bottom: 85px; width: 95%; padding: 10px 15px; }
     #time-display { font-size: 12px; }
-    
-    /* 5. Alt Menü (Control Dock) */
-    .control-dock {
-        bottom: 15px;
-        width: 95%; /* Ekrana yay */
-        justify-content: space-between; /* Butonları eşit dağıt */
-        padding: 6px 10px;
-    }
-    .dock-btn {
-        padding: 8px 10px;
-        font-size: 11px;
-        flex: 1; /* Hepsi eşit genişlikte olsun */
-        justify-content: center;
-    }
-    /* İkon ve yazı arasına mesafe koyma, sadece ikon kalsın çok darsa */
+    .control-dock { bottom: 15px; width: 95%; justify-content: space-between; padding: 6px 10px; }
+    .dock-btn { padding: 8px 10px; font-size: 11px; flex: 1; justify-content: center; }
     .dock-btn i { font-size: 14px; }
-
-    /* 6. POPUP KART (Mobilde Tam Oturmalı) */
-    .mapboxgl-popup {
-        max-width: 90% !important; /* Ekranın %90'ını geçmesin */
-    }
-    .mapboxgl-popup-content {
-        min-width: auto !important; /* Genişlik esnek olsun */
-        width: 280px; /* Standart mobil genişlik */
-    }
-    .card-temp { font-size: 36px; } /* Sayıyı biraz küçült */
-    .card-icon-big svg { width: 48px; height: 48px; }
+    .mapboxgl-popup { max-width: 90% !important; }
+    .mapboxgl-popup-content { min-width: auto !important; width: 280px; }
+    .card-temp { font-size: 42px; }
+    .card-icon-big svg { width: 56px; height: 56px; }
 }
 
-/* Çok Küçük Ekranlar (iPhone SE vb.) */
 @media (max-width: 380px) {
-    .dock-btn span { display: none; } /* Yazıları gizle, sadece ikon kalsın */
+    .dock-btn span { display: none; }
     .dock-btn { padding: 10px; }
 }
