@@ -15,8 +15,7 @@
 
 | Genel Görünüm (Karanlık Mod) | Basınç ve İzobar Analizi |
 |:---:|:---:|
-| ![Main View](assets/screenshot1.png) | ![Isobars](assets/screenshot2.png) |
-*(Not: Projene 'assets' klasörü açıp ekran görüntülerini oraya koyabilirsin)*
+| ![Main View](assets/screenshot1.png) |
 
 ---
 
