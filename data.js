@@ -1,6 +1,3 @@
-// GLOBAL ÖNEMLİ ŞEHİRLER VE BAŞKENTLER
-// Harita ilk açıldığında bu noktalar yüklenecek.
-// Kullanıcı tıkladıkça yeni noktalar app.js içinde dinamik olarak eklenecek.
 
 const globalCities = [
     // --- TÜRKİYE & AZERBAYCAN ---
@@ -56,5 +53,5 @@ const globalCities = [
     {n:"Auckland", lat:-36.84, lon:174.76}
 ];
 
-// app.js ile uyumluluk için bu isimle dışarı açıyoruz
+// app.js ile uyumluluk
 const allCities = [...globalCities];
